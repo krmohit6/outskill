@@ -3,3 +3,6 @@ __pycache__
 *.faiss
 *.pkl
 *.DS_Store
+*.bin
+*.db
+*.sqlite3
