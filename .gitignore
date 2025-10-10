@@ -6,3 +6,4 @@ __pycache__
 *.bin
 *.db
 *.sqlite3
+*outputs*
