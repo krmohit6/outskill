@@ -9,7 +9,34 @@ load_dotenv()
 from tools import exa_search_tool, log_reader_tool
 
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
-llm = LLM(model="gpt-4o", temperature=0.1)
+
+llm = LLM(
+    model="gpt-4o",
+    temperature=0.1,
+    max_tokens=4000,
+    timeout=120,  # 2 minutes timeout
+)
+
+
+def system_template_devops():
+    """Custom system template for DevOps agents"""
+    return """You are an expert DevOps engineer with extensive experience in:
+    - Infrastructure automation and orchestration
+    - Container technologies (Docker, Kubernetes)
+    - CI/CD pipelines and deployment strategies
+    - Monitoring, logging, and observability
+    - Cloud platforms (AWS, GCP, Azure)
+    - Security best practices and compliance
+    
+    Always provide:
+    1. Detailed technical analysis
+    2. Step-by-step solutions
+    3. Best practices and recommendations
+    4. Risk assessment and mitigation strategies
+    5. References to official documentation
+    
+    Focus on practical, production-ready solutions."""
+
 
 # Agent 1: Log Analyzer - Analyzes log files to identify issues
 log_analyzer = Agent(
@@ -23,6 +50,11 @@ log_analyzer = Agent(
     tools=[log_reader_tool],
     verbose=True,
     max_iter=3,
+    max_rpm=10,  # Rate limiting: max 10 requests per minute
+    memory=True,  # Enable memory for learning from previous analyses
+    system_template=system_template_devops(),
+    max_execution_time=300,  # 5 minutes max execution time
+    respect_context_window=True,  # Respect model's context window
 )
 
 # Agent 2: Issue Investigator - Searches for solutions online
@@ -37,6 +69,11 @@ issue_investigator = Agent(
     tools=[exa_search_tool],
     verbose=True,
     max_iter=5,
+    max_rpm=15,  # Higher rate limit for search operations
+    memory=True,  # Remember previous search patterns and results
+    system_template=system_template_devops(),
+    max_execution_time=600,  # 10 minutes for thorough investigation
+    respect_context_window=True,
 )
 
 # Agent 3: Solution Specialist - Provides actionable solutions
@@ -49,4 +86,10 @@ solution_specialist = Agent(
     You always provide official documentation references, tested solutions, and 
     preventive measures to avoid future occurrences.""",
     verbose=True,
+    max_iter=4,
+    max_rpm=8,  # Conservative rate limit for solution generation
+    memory=True,  # Remember successful solutions for similar issues
+    system_template=system_template_devops(),
+    max_execution_time=450,  # 7.5 minutes for comprehensive solutions
+    respect_context_window=True,
 )

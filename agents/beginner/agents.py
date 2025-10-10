@@ -8,7 +8,12 @@ load_dotenv()
 
 # Create an instance of OpenAI's LLM
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
-llm = LLM(model="gpt-4o", temperature=0.7)
+llm = LLM(
+    model="gpt-4o",
+    temperature=0.7,
+    max_tokens=4000,
+    timeout=120,
+)
 
 # Define your agent with OpenAI LLM
 thinker = Agent(

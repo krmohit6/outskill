@@ -1,6 +1,11 @@
+import os
+
 from crewai import Task
 
 from agents import issue_investigator, log_analyzer, solution_specialist
+
+# Create output directory for task results
+os.makedirs("task_outputs", exist_ok=True)
 
 # Task 1: Analyze log file to identify issues
 analyze_logs_task = Task(
@@ -21,6 +26,7 @@ analyze_logs_task = Task(
     - Root cause analysis based on log evidence
     - Relevant technical context and affected components""",
     agent=log_analyzer,
+    output_file="task_outputs/log_analysis.md",
 )
 
 # Task 2: Investigate the identified issue online
@@ -43,6 +49,7 @@ investigate_issue_task = Task(
     - Best practices to prevent similar issues""",
     agent=issue_investigator,
     context=[analyze_logs_task],
+    output_file="task_outputs/investigation_report.md",
 )
 
 # Task 3: Provide actionable solution
@@ -67,4 +74,5 @@ provide_solution_task = Task(
     - Links to official documentation and references""",
     agent=solution_specialist,
     context=[analyze_logs_task, investigate_issue_task],
+    output_file="task_outputs/solution_plan.md",
 )
