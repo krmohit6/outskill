@@ -6,7 +6,7 @@ from agents import issue_investigator, log_analyzer, solution_specialist
 from tasks import analyze_logs_task, investigate_issue_task, provide_solution_task
 
 os.environ["CREWAI_STORAGE_DIR"] = (
-    "/Users/ishandutta/Documents/code/outskill/agents/intermediate_v1/crewai_memory"
+    "/Users/ishandutta/Documents/code/outskill/agents/intermediate/crewai_memory"
 )
 
 # Enhanced DevOps crew with advanced configuration
