@@ -13,10 +13,10 @@ from tools import (
 
 load_dotenv()
 
-os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
-
 llm = LLM(
-    model="gpt-4.1-2025-04-14",
+    model="openai/gpt-4.1-2025-04-14",
+    api_key=os.getenv("OPENROUTER_API_KEY"),
+    base_url="https://openrouter.ai/api/v1",
     temperature=0.7,
     max_tokens=4000,
     timeout=120,  # 2 minutes timeout
