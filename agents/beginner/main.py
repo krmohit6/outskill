@@ -5,22 +5,26 @@ CrewAI Memory Docs: https://docs.crewai.com/en/concepts/memory
 import os
 
 from crewai import Crew
-from tasks import conflict_task
 
-from agents import thinker
+from agents import hate_speech_detector
+from tasks import hate_speech_detection_task
 
 os.environ["CREWAI_STORAGE_DIR"] = (
     "/Users/ishandutta/Documents/code/outskill/agents/beginner/crewai_memory"
 )
 
 # Define the Crew with agents and tasks
-crew = Crew(agents=[thinker], tasks=[conflict_task], memory=False, verbose=True)
+crew = Crew(
+    agents=[hate_speech_detector],
+    tasks=[hate_speech_detection_task],
+    memory=False,
+    verbose=True,
+)
 
 # Kickoff the Crew with the input query
-# Text = "After a long day at office, I was going back home in the late evening. Then, I met my friend on the way to office."
-Text = "I love to travel to new places and explore the culture and food of the place."
-# Text = "I went to the library to study, but I forgot to bring my books and studied all of them."
-# Text = "She said she has never been to Paris, yet she described the Eiffel Tower in great detail from her last trip."
+Text = "That country is less intelligent and incapable of contributing to society."
+# Text = "Public libraries are important resources for everyone in the city."
+# Text = "People from that race are all untrustworthy and should not be allowed to work in public jobs."
 
 result = crew.kickoff(inputs={"text": Text})
 

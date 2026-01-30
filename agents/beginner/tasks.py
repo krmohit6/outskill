@@ -1,12 +1,12 @@
 from crewai import Task
 
-from agents import thinker
+from agents import hate_speech_detector
 
 # Define a task with a description and expected output
-conflict_task = Task(
+hate_speech_detection_task = Task(
     description=(
-        "Find if there are any conflicting statement / information in text. \n Text : \n{text}"
+        "Find if there are any hate speech / offensive language in text. \n Text : \n{text}"
     ),
-    expected_output="Respond with 'conflict' / 'no conflict'",
-    agent=thinker,
+    expected_output="Respond with 'hate speech' / 'no hate speech'",
+    agent=hate_speech_detector,
 )

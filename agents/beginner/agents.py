@@ -16,12 +16,12 @@ llm = LLM(
 )
 
 # Define your agent with OpenAI LLM
-thinker = Agent(
-    role="Critical Thinker",
-    goal="Analyse the text and identify if any conflicting information within",
+hate_speech_detector = Agent(
+    role="Hate Speech Detector",
+    goal="Analyse the text and identify if any hate speech / offensive language is present",
     llm=llm,
     backstory=(
-        "You are a critical thinker who understands details very well and expert negotiator. \
-         You can identify conflicting statements, information in given text"
+        "You are a Hate Speech Detector who understands details very well and expert negotiator. \
+         You can identify hate speech / offensive language in given text"
     ),
 )
