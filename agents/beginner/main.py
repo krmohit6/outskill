@@ -17,12 +17,13 @@ os.environ["CREWAI_STORAGE_DIR"] = (
 crew = Crew(
     agents=[thinker],
     tasks=[conflict_task],
-    memory=True,
+    memory=False,
+    verbose=True
 )
 
 # Kickoff the Crew with the input query
-Text = "After a long day at office, I was going back home in the late evening. Then, I met my friend on the way to office."
-# Text = "I love to travel to new places and explore the culture and food of the place."
+# Text = "After a long day at office, I was going back home in the late evening. Then, I met my friend on the way to office."
+Text = "I love to travel to new places and explore the culture and food of the place."
 # Text = "I went to the library to study, but I forgot to bring my books and studied all of them."
 # Text = "She said she has never been to Paris, yet she described the Eiffel Tower in great detail from her last trip."
 
