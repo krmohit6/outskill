@@ -59,7 +59,8 @@ import pandas as pd
 from crewai_tools import EXASearchTool
 from dotenv import load_dotenv
 from llama_index.core import Settings, SimpleDirectoryReader, VectorStoreIndex
-from llama_index.core.query_engine import RouterQueryEngine, SubQuestionQueryEngine
+from llama_index.core.query_engine import (RouterQueryEngine,
+                                           SubQuestionQueryEngine)
 from llama_index.core.response.pprint_utils import pprint_response
 from llama_index.core.selectors import LLMSingleSelector
 from llama_index.core.tools import FunctionTool, QueryEngineTool, ToolMetadata

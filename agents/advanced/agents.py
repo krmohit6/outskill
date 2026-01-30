@@ -3,13 +3,8 @@ import os
 from crewai import Agent
 from crewai.llm import LLM
 from dotenv import load_dotenv
-
-from tools import (
-    exa_search_tool,
-    get_company_info,
-    get_current_stock_price,
-    get_income_statements,
-)
+from tools import (exa_search_tool, get_company_info, get_current_stock_price,
+                   get_income_statements)
 
 load_dotenv()
 

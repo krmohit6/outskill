@@ -3,9 +3,7 @@ import requests  # requests is used to make HTTP requests to fetch images
 import torch  # PyTorch library for tensor operations and model handling
 from PIL import Image  # PIL is used for opening and manipulating images
 from transformers import (  # Importing the processor and model from Hugging Face Transformers
-    Blip2ForConditionalGeneration,
-    Blip2Processor,
-)
+    Blip2ForConditionalGeneration, Blip2Processor)
 
 # Determine the device to run the model on: use GPU if available, otherwise use CPU
 device = "cuda" if torch.cuda.is_available() else "cpu"

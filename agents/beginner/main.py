@@ -5,21 +5,16 @@ CrewAI Memory Docs: https://docs.crewai.com/en/concepts/memory
 import os
 
 from crewai import Crew
+from tasks import conflict_task
 
 from agents import thinker
-from tasks import conflict_task
 
 os.environ["CREWAI_STORAGE_DIR"] = (
     "/Users/ishandutta/Documents/code/outskill/agents/beginner/crewai_memory"
 )
 
 # Define the Crew with agents and tasks
-crew = Crew(
-    agents=[thinker],
-    tasks=[conflict_task],
-    memory=False,
-    verbose=True
-)
+crew = Crew(agents=[thinker], tasks=[conflict_task], memory=False, verbose=True)
 
 # Kickoff the Crew with the input query
 # Text = "After a long day at office, I was going back home in the late evening. Then, I met my friend on the way to office."

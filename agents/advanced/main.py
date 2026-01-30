@@ -5,9 +5,9 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from crewai import Crew, Process
+from tasks import advise, analyse, get_company_financials, get_company_news
 
 from agents import analyst, data_explorer, fin_expert, llm, news_info_explorer
-from tasks import advise, analyse, get_company_financials, get_company_news
 
 os.environ["CREWAI_STORAGE_DIR"] = (
     "/Users/ishandutta/Documents/code/outskill/agents/advanced/crewai_memory"

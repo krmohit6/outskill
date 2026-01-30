@@ -5,8 +5,8 @@ Simple Parallel Processing Tutorial
 Learn parallel processing basics using number squaring examples.
 """
 
-import time
 import threading
+import time
 from concurrent.futures import ThreadPoolExecutor
 
 
@@ -16,7 +16,7 @@ def square_number(number):
     """
     print(f"Squaring {number}...")
     time.sleep(0.5)  # Simulate some work
-    result = number ** 2
+    result = number**2
     print(f"Result: {number}² = {result}")
     return result
 
@@ -30,15 +30,16 @@ def demo_sequential():
     print("-" * 30)
     numbers = [2, 3, 4, 5, 6, 7, 8, 9, 10]
     start = time.time()
-    
+
     results = []
     for num in numbers:
         result = square_number(num)
         results.append(result)
-    
+
     end_time = time.time() - start
     print(f"Sequential time: {end_time:.1f}s")
     print(f"Results: {results}")
+
 
 def demo_threadpool():
     """
@@ -49,13 +50,13 @@ def demo_threadpool():
     print("-" * 30)
     numbers = [2, 3, 4, 5, 6, 7, 8, 9, 10]
     start = time.time()
-    
+
     with ThreadPoolExecutor(max_workers=4) as executor:
         # Submit all tasks and get future objects
         futures = [executor.submit(square_number, num) for num in numbers]
         # Get results as they complete
         results = [future.result() for future in futures]
-    
+
     end_time = time.time() - start
     print(f"ThreadPool time: {end_time:.1f}s")
     print(f"Results: {results}")
@@ -68,10 +69,10 @@ def main():
     print("🔢 SIMPLE PARALLEL PROCESSING")
     print("=" * 40)
     print("Task: Square numbers [2, 3, 4, 5, 6, 7, 8, 9, 10]")
-    
-    demo_sequential()      # ~2.0 seconds (4 × 0.5s)
-    demo_threadpool()      # ~0.5 seconds (parallel)
-    
+
+    demo_sequential()  # ~2.0 seconds (4 × 0.5s)
+    demo_threadpool()  # ~0.5 seconds (parallel)
+
     print("\n" + "=" * 40)
     print("📊 SUMMARY:")
     print("• Sequential: Tasks run one after another")

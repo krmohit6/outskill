@@ -18,18 +18,18 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+from rich.align import Align
+from rich.box import DOUBLE, ROUNDED, SIMPLE
+from rich.columns import Columns
 from rich.console import Console
+from rich.layout import Layout
+from rich.padding import Padding
 from rich.panel import Panel
+from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.rule import Rule
 from rich.table import Table
 from rich.text import Text
-from rich.layout import Layout
-from rich.columns import Columns
-from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.tree import Tree
-from rich.rule import Rule
-from rich.align import Align
-from rich.box import ROUNDED, DOUBLE, SIMPLE
-from rich.padding import Padding
 
 
 class CrewAIMemoryExplorer:
