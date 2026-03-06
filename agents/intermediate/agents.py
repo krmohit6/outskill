@@ -12,9 +12,6 @@ llm = LLM(
     model="openai/gpt-4o",
     api_key=os.getenv("OPENROUTER_API_KEY"),
     base_url="https://openrouter.ai/api/v1",
-    temperature=0.1,
-    max_tokens=4000,
-    timeout=120,  # 2 minutes timeout
 )
 
 
@@ -49,12 +46,11 @@ log_analyzer = Agent(
     messages, and determining the root cause of failures from log data.""",
     tools=[log_reader_tool],
     verbose=True,
-    max_iter=3,
-    max_rpm=10,  # Rate limiting: max 10 requests per minute
-    memory=True,  # Enable memory for learning from previous analyses
-    system_template=system_template_devops(),
-    max_execution_time=300,  # 5 minutes max execution time
     respect_context_window=True,  # Respect model's context window
+    max_iter=3,
+    max_execution_time=300,  # 5 minutes max execution time
+    max_rpm=10,  # Rate limiting: max 10 requests per minute
+    system_template=system_template_devops(),
 )
 
 # Agent 2: Issue Investigator - Searches for solutions online
@@ -68,12 +64,11 @@ issue_investigator = Agent(
     about error patterns and their solutions.""",
     tools=[exa_search_tool],
     verbose=True,
-    max_iter=5,
-    max_rpm=15,  # Higher rate limit for search operations
-    memory=True,  # Remember previous search patterns and results
-    system_template=system_template_devops(),
-    max_execution_time=600,  # 10 minutes for thorough investigation
     respect_context_window=True,
+    max_iter=5,
+    max_execution_time=600,  # 10 minutes for thorough investigation
+    max_rpm=15,  # Higher rate limit for search operations
+    system_template=system_template_devops(),
 )
 
 # Agent 3: Solution Specialist - Provides actionable solutions
@@ -86,10 +81,9 @@ solution_specialist = Agent(
     You always provide official documentation references, tested solutions, and 
     preventive measures to avoid future occurrences.""",
     verbose=True,
-    max_iter=4,
-    max_rpm=8,  # Conservative rate limit for solution generation
-    memory=True,  # Remember successful solutions for similar issues
-    system_template=system_template_devops(),
-    max_execution_time=450,  # 7.5 minutes for comprehensive solutions
     respect_context_window=True,
+    max_iter=4,
+    max_execution_time=450,  # 7.5 minutes for comprehensive solutions
+    max_rpm=8,  # Conservative rate limit for solution generation
+    system_template=system_template_devops(),
 )
