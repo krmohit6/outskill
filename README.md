@@ -21,7 +21,7 @@ Workshop code for **Outskill** GenAI tracks: CrewAI agents (beginner → advance
 ## Quick start
 
 ```bash
-git clone <your-repo-url> && cd outskill
+git clone https://github.com/ishandutta0098/outskill.git && cd outskill
 
 # Pick one:
 conda create -n agents python=3.11 -y && conda activate agents
@@ -112,7 +112,7 @@ Imports assume you run from the **track directory** (or adjust `PYTHONPATH` acco
 
 ## License
 
-Add a `LICENSE` file and update this line—or remove the section if the repo is private.
+MIT License
 
 ---
 
