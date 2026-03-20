@@ -6,7 +6,10 @@ from agents import hate_speech_detector
 from tasks import hate_speech_detection_task
 
 # Define the Crew with agents and tasks
-crew = Crew(agents=[hate_speech_detector], tasks=[hate_speech_detection_task])
+crew = Crew(
+    agents=[hate_speech_detector],
+    tasks=[hate_speech_detection_task]
+    )
 
 # Kickoff the Crew with the input query
 Text = "Public libraries are important resources for everyone in the city."
