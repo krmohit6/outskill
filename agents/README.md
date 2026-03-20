@@ -28,7 +28,6 @@
 
 - Learn to build a sequential multi-agent system with CrewAI.
 - `Context` passing between agents
-- `System Prompt` for AI Agents
 - `InBuilt Tool` usage in CrewAI
 - Important Parameters such as `max_iter`, `max_rpm`, `max_execution_time`, `respect_context_window`, etc.
 

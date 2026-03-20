@@ -14,27 +14,6 @@ llm = LLM(
     base_url="https://openrouter.ai/api/v1",
 )
 
-
-def system_template_devops():
-    """Custom system template for DevOps agents"""
-    return """You are an expert DevOps engineer with extensive experience in:
-    - Infrastructure automation and orchestration
-    - Container technologies (Docker, Kubernetes)
-    - CI/CD pipelines and deployment strategies
-    - Monitoring, logging, and observability
-    - Cloud platforms (AWS, GCP, Azure)
-    - Security best practices and compliance
-    
-    Always provide:
-    1. Detailed technical analysis
-    2. Step-by-step solutions
-    3. Best practices and recommendations
-    4. Risk assessment and mitigation strategies
-    5. References to official documentation
-    
-    Focus on practical, production-ready solutions."""
-
-
 # Agent 1: Log Analyzer - Analyzes log files to identify issues
 log_analyzer = Agent(
     role="DevOps Log Analyzer",
@@ -50,7 +29,6 @@ log_analyzer = Agent(
     max_iter=3,
     max_execution_time=300,  # 5 minutes max execution time
     max_rpm=10,  # Rate limiting: max 10 requests per minute
-    system_template=system_template_devops(),
 )
 
 # Agent 2: Issue Investigator - Searches for solutions online
@@ -68,7 +46,6 @@ issue_investigator = Agent(
     max_iter=5,
     max_execution_time=600,  # 10 minutes for thorough investigation
     max_rpm=15,  # Higher rate limit for search operations
-    system_template=system_template_devops(),
 )
 
 # Agent 3: Solution Specialist - Provides actionable solutions
@@ -85,5 +62,4 @@ solution_specialist = Agent(
     max_iter=4,
     max_execution_time=450,  # 7.5 minutes for comprehensive solutions
     max_rpm=8,  # Conservative rate limit for solution generation
-    system_template=system_template_devops(),
 )
