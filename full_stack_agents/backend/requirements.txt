@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+pydantic>=2.0
+crewai
+crewai-tools
+yfinance
+curl-cffi
+sse-starlette
+litellm
