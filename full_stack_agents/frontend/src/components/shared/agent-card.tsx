@@ -9,6 +9,8 @@ interface AgentCardProps {
 }
 
 export function AgentCard({ agentInfo, isActive }: AgentCardProps) {
+  if (!agentInfo) return null
+
   return (
     <motion.div
       animate={
