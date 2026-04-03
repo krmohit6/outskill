@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { TrendingUp } from 'lucide-react'
 import { useAppStore } from '@/store/app-store'
 import { useAnalyzeStock } from '@/hooks/use-advanced'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
@@ -32,31 +33,51 @@ export function AdvancedPage() {
   const handleSearch = (stock: string) => {
     setPhases(initialPhases)
     setResult(null)
-    analyzeStockStream({ stock, demo: demoMode }, (event: any) => {
-      if (event.type === 'phase_update') {
-        setPhases((prev) =>
-          prev.map((p) =>
-            p.name === event.phase
-              ? { ...p, status: event.status, elapsed: event.elapsed ?? p.elapsed }
-              : p,
-          ),
-        )
-      } else if (event.type === 'result') {
-        setResult(event.data)
-        setPhases((prev) => prev.map((p) => ({ ...p, status: 'complete' })))
-      }
-    })
+    analyzeStockStream(
+      { stock, demo: demoMode },
+      (event: Record<string, unknown>) => {
+        if (event.type === 'phase_update') {
+          setPhases((prev) =>
+            prev.map((p) =>
+              p.name === event.phase
+                ? {
+                    ...p,
+                    status: event.status as Phase['status'],
+                    elapsed:
+                      typeof event.elapsed === 'number'
+                        ? event.elapsed
+                        : p.elapsed,
+                  }
+                : p,
+            ),
+          )
+        } else if (event.type === 'result') {
+          setResult(event.data as AdvancedResult)
+          setPhases((prev) => prev.map((p) => ({ ...p, status: 'complete' })))
+        }
+      },
+    )
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <h2 className="text-2xl font-bold">Market Intelligence</h2>
-        <DemoBadge />
+    <div className="space-y-8">
+      <div className="space-y-2">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20">
+            <TrendingUp className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-2xl font-bold">Market Intelligence</h2>
+              <DemoBadge />
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Parallel multi-agent financial analysis &mdash; data, news, and investment
+              recommendations
+            </p>
+          </div>
+        </div>
       </div>
-      <p className="text-muted-foreground">
-        Parallel multi-agent financial analysis — aggregating data, news, and generating investment recommendations.
-      </p>
 
       <StockSearch onSearch={handleSearch} isLoading={isAnalyzing} />
 
@@ -66,7 +87,8 @@ export function AdvancedPage() {
         <div className="space-y-6">
           <MetricsGrid data={result.company_info} />
 
-          <Card>
+          <Card className="relative overflow-hidden">
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
             <CardHeader>
               <CardTitle className="text-lg">Financial Analysis</CardTitle>
             </CardHeader>
@@ -82,13 +104,39 @@ export function AdvancedPage() {
 
           <Card>
             <CardContent className="p-4">
-              <div className="flex items-center justify-between text-sm text-muted-foreground">
-                <span>Parallel: {result.timing.parallel_time.toFixed(1)}s</span>
-                <span>Analysis: {result.timing.analysis_time.toFixed(1)}s</span>
-                <span>Total: {result.timing.total_time.toFixed(1)}s</span>
-                <span className="text-emerald-400">
-                  Saved: {result.timing.time_saved.toFixed(1)}s
-                </span>
+              <div className="flex items-center justify-between text-sm">
+                <div className="space-y-0.5">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    Parallel
+                  </p>
+                  <p className="font-bold">
+                    {result.timing.parallel_time.toFixed(1)}s
+                  </p>
+                </div>
+                <div className="space-y-0.5">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    Analysis
+                  </p>
+                  <p className="font-bold">
+                    {result.timing.analysis_time.toFixed(1)}s
+                  </p>
+                </div>
+                <div className="space-y-0.5">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    Total
+                  </p>
+                  <p className="font-bold">
+                    {result.timing.total_time.toFixed(1)}s
+                  </p>
+                </div>
+                <div className="space-y-0.5">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-emerald-400/70">
+                    Time Saved
+                  </p>
+                  <p className="font-bold text-emerald-400">
+                    {result.timing.time_saved.toFixed(1)}s
+                  </p>
+                </div>
               </div>
             </CardContent>
           </Card>
