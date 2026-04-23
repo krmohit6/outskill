@@ -103,3 +103,8 @@ def get_income_statements(symbol: str):
         return financials.to_json(orient="index")
     except Exception as e:
         return f"Error fetching income statements for {symbol}: {e}"
+
+# {toolname: get_current_stock_price, tooldescription: Use this function to get the current stock price for a given symbol. parameters: symbol (str): The stock symbol. returns: str: The current stock price or error message.}
+# {toolname: get_company_info, tooldescription: Use this function to get company information and current financial snapshot for a given stock symbol. parameters: symbol (str): The stock symbol. returns: JSON containing company profile and current financial snapshot.}
+# {toolname: get_income_statements, tooldescription: Use this function to get income statements for a given stock symbol. parameters: symbol (str): The stock symbol. returns: JSON containing income statements or an empty dictionary.}
+
