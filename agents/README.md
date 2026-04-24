@@ -65,17 +65,30 @@
 
 **Agent Name**: Investment Advisor AI Agent
 
+#### v1 — Investment Advisor Pipeline
+
 **Learning Objectives**:
 
-- Learn to build a parallel multi-agent system with CrewAI.
-- Understand how to run agents in `parallel`.
-- Learn to create and **use** `custom tools` **in Crew**AI.
+- Build `custom tools` with the `@tool` decorator (wrapping `yfinance` for real financial data)
+- Multi-crew architecture — separate crews for separate concerns
+- `Parallel execution` with `ThreadPoolExecutor` — run data + news gathering simultaneously
+- `Structured Output` — get typed `InvestmentRecommendation` objects using `output_pydantic`
+- `Guardrails` — validate recommendations before accepting them
 
 **Examples Set**:
 
 - Currency Converter Custom Tool
 - CSV Data Parser Custom Tool
 - URL Shortener Custom Tool
+
+#### v2 — Scaling to Production (Perplexity Finance-inspired)
+
+**Learning Objectives**:
+
+- `Async Multi-Stock Screener` — analyze a watchlist of stocks simultaneously using `akickoff()` + `asyncio.gather()`
+- `Flows` — build intelligent routing pipelines with `@start`, `@router`, `@listen` (BUY → entry strategy, SELL → exit plan, HOLD → monitoring plan)
+- Full pipeline combining async + flows into a portfolio screener with smart routing
+- `FastAPI Integration` — expose the agent system as a REST API
 
 ---
 
