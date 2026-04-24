@@ -45,19 +45,6 @@
 
 - `Structured Output` — get typed Python objects from agents using `output_pydantic`
 - `Guardrails` — agents self-correct when output fails validation (code + no-code)
-- `Memory` — agents remember and learn across multiple runs
-
-**Standalone Feature Notebooks** (run independently, one concept each):
-
-- `feature_structured_output.ipynb` — Log analysis with Pydantic models (before/after)
-- `feature_guardrails.ipynb` — Agent self-correction with code + no-code guardrails (before/after)
-
-**Examples Set** (v2 Features):
-
-- Structured Output with Pydantic
-- Code Guardrail (validation function)
-- No-Code Guardrail (plain English)
-- Memory-enabled Crew
 
 ---
 
@@ -81,14 +68,12 @@
 - CSV Data Parser Custom Tool
 - URL Shortener Custom Tool
 
-#### v2 — Scaling to Production (Perplexity Finance-inspired)
+#### v2 — Scaling to Production
 
 **Learning Objectives**:
 
-- `Async Multi-Stock Screener` — analyze a watchlist of stocks simultaneously using `akickoff()` + `asyncio.gather()`
-- `Flows` — build intelligent routing pipelines with `@start`, `@router`, `@listen` (BUY → entry strategy, SELL → exit plan, HOLD → monitoring plan)
-- Full pipeline combining async + flows into a portfolio screener with smart routing
-- `FastAPI Integration` — expose the agent system as a REST API
+- `Async Multi-Stock Screener` — analyze a watchlist of stocks simultaneously using `kickoff_async()` + `asyncio.gather()`
+- Full async portfolio screener pipeline with side-by-side comparison
 
 ---
 
