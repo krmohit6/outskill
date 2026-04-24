@@ -24,19 +24,40 @@
 
 **Agent Name**: DevOps Engineer Agent.
 
+#### v1 — Multi-Agent Pipelines
+
 **Learning Objectives**:
 
 - Learn to build a sequential multi-agent system with CrewAI.
 - `Context` passing between agents
-- `InBuilt Tool` usage in CrewAI
+- `InBuilt Tool` usage in CrewAI (`FileReadTool`, `EXASearchTool`)
 - Important Parameters such as `max_iter`, `max_rpm`, `max_execution_time`, `respect_context_window`, etc.
 
-**Examples Set**:
-Learn to more usecases of inbuilt tools in CrewAI
+**Examples Set** (InBuilt Tools):
 
 - Image Generation Tool
 - Code Interpreter Tool
 - AWS S3 Cloud Storage Tool
+
+#### v2 — Production-Grade Features
+
+**Learning Objectives**:
+
+- `Structured Output` — get typed Python objects from agents using `output_pydantic`
+- `Guardrails` — agents self-correct when output fails validation (code + no-code)
+- `Memory` — agents remember and learn across multiple runs
+
+**Standalone Feature Notebooks** (run independently, one concept each):
+
+- `feature_structured_output.ipynb` — Log analysis with Pydantic models (before/after)
+- `feature_guardrails.ipynb` — Agent self-correction with code + no-code guardrails (before/after)
+
+**Examples Set** (v2 Features):
+
+- Structured Output with Pydantic
+- Code Guardrail (validation function)
+- No-Code Guardrail (plain English)
+- Memory-enabled Crew
 
 ---
 
