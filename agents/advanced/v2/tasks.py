@@ -5,15 +5,7 @@ from crewai import Task
 from crewai.tasks.task_output import TaskOutput
 from pydantic import BaseModel, Field
 
-from agents import (
-    analyst,
-    data_explorer,
-    entry_strategist,
-    exit_planner,
-    fin_expert,
-    hold_monitor,
-    news_info_explorer,
-)
+from agents import analyst, data_explorer, fin_expert, news_info_explorer
 
 os.makedirs("task_outputs", exist_ok=True)
 
@@ -70,31 +62,4 @@ advise = Task(
     output_pydantic=InvestmentRecommendation,
     guardrail=validate_recommendation,
     output_file="task_outputs/investment_recommendation.md",
-)
-
-entry_strategy_task = Task(
-    description="Based on the BUY recommendation and analysis, create a detailed entry strategy for stock: {stock}. "
-    "Include suggested entry price range, position sizing, and timeline.",
-    expected_output="A detailed entry strategy with price targets, timing, and position sizing recommendations.",
-    agent=entry_strategist,
-    context=[analyse, advise],
-    output_file="task_outputs/entry_strategy.md",
-)
-
-exit_plan_task = Task(
-    description="Based on the SELL recommendation and analysis, create a detailed exit plan for stock: {stock}. "
-    "Include timing, risk warnings, and alternative investment suggestions.",
-    expected_output="A detailed exit plan with timing, risk assessment, and alternative investment options.",
-    agent=exit_planner,
-    context=[analyse, advise],
-    output_file="task_outputs/exit_plan.md",
-)
-
-monitoring_plan_task = Task(
-    description="Based on the HOLD recommendation and analysis, create a monitoring plan for stock: {stock}. "
-    "Include key indicators to watch and triggers for re-evaluation.",
-    expected_output="A monitoring plan with key indicators, re-evaluation triggers, and watchlist events.",
-    agent=hold_monitor,
-    context=[analyse, advise],
-    output_file="task_outputs/monitoring_plan.md",
 )

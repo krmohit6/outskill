@@ -1,141 +1,79 @@
 import asyncio
 import time
 
-from crewai import Crew, Process
-from crewai.flow.flow import Flow, listen, router, start
-from pydantic import BaseModel
+from crewai import Crew, Process, Task
 
-from agents import (
-    analyst,
-    data_explorer,
-    entry_strategist,
-    exit_planner,
-    fin_expert,
-    hold_monitor,
-    news_info_explorer,
-)
-from tasks import (
-    InvestmentRecommendation,
-    advise,
-    analyse,
-    entry_strategy_task,
-    exit_plan_task,
-    get_company_financials,
-    get_company_news,
-    monitoring_plan_task,
-    validate_recommendation,
-)
-
-financial_crew = Crew(
-    agents=[data_explorer],
-    tasks=[get_company_financials],
-    verbose=True,
-    process=Process.sequential,
-    cache=True,
-    max_rpm=15,
-)
-
-news_crew = Crew(
-    agents=[news_info_explorer],
-    tasks=[get_company_news],
-    verbose=True,
-    process=Process.sequential,
-    cache=True,
-    max_rpm=15,
-)
-
-analysis_crew = Crew(
-    agents=[analyst, fin_expert],
-    tasks=[analyse, advise],
-    verbose=True,
-    process=Process.sequential,
-    cache=True,
-    max_rpm=15,
-)
-
-entry_crew = Crew(
-    agents=[entry_strategist],
-    tasks=[entry_strategy_task],
-    verbose=True,
-    process=Process.sequential,
-    cache=True,
-    max_rpm=10,
-)
-
-exit_crew = Crew(
-    agents=[exit_planner],
-    tasks=[exit_plan_task],
-    verbose=True,
-    process=Process.sequential,
-    cache=True,
-    max_rpm=10,
-)
-
-hold_crew = Crew(
-    agents=[hold_monitor],
-    tasks=[monitoring_plan_task],
-    verbose=True,
-    process=Process.sequential,
-    cache=True,
-    max_rpm=10,
-)
+from agents import analyst, data_explorer, fin_expert, news_info_explorer
+from tasks import InvestmentRecommendation, validate_recommendation
 
 
-class AnalysisState(BaseModel):
-    stock: str = ""
-    action: str = ""
-    recommendation_raw: str = ""
-    final_report: str = ""
+def build_single_stock_crew():
+    """Build a crew for analyzing a single stock."""
+    financials_task = Task(
+        description="Get financial data like income statements and other fundamental ratios for stock: {stock}. "
+        "Use the year 2026 as the current year.",
+        expected_output="Detailed information from income statement, key ratios for {stock}.",
+        agent=data_explorer,
+    )
 
+    news_task = Task(
+        description="Get latest news and business information about company: {stock}. "
+        "Use the year 2026 as the current year.",
+        expected_output="Latest news and business information about the company.",
+        agent=news_info_explorer,
+    )
 
-class InvestmentFlow(Flow[AnalysisState]):
+    analysis_task = Task(
+        description="Make thorough analysis based on given financial data and latest news of a stock.",
+        expected_output="Comprehensive analysis of a stock outlining financial health, stock valuation, risks, and news.",
+        agent=analyst,
+        context=[financials_task, news_task],
+    )
 
-    @start()
-    def analyze_stock(self):
-        result = analysis_crew.kickoff(inputs={"stock": self.state.stock})
-        self.state.action = result.pydantic.action if result.pydantic else "HOLD"
-        self.state.recommendation_raw = result.raw
-        return self.state.action
+    advise_task = Task(
+        description="Make a recommendation about investing in a stock, based on analysis provided and current stock price.",
+        expected_output="A structured investment recommendation with action, confidence, target price, reasons, and risks.",
+        agent=fin_expert,
+        context=[analysis_task],
+        output_pydantic=InvestmentRecommendation,
+        guardrail=validate_recommendation,
+    )
 
-    @router(analyze_stock)
-    def pick_next_step(self):
-        if self.state.action == "BUY":
-            return "buy_path"
-        elif self.state.action == "SELL":
-            return "sell_path"
-        return "hold_path"
-
-    @listen("buy_path")
-    def generate_entry_strategy(self):
-        result = entry_crew.kickoff(inputs={"stock": self.state.stock})
-        self.state.final_report = result.raw
-
-    @listen("sell_path")
-    def generate_exit_plan(self):
-        result = exit_crew.kickoff(inputs={"stock": self.state.stock})
-        self.state.final_report = result.raw
-
-    @listen("hold_path")
-    def generate_monitoring_plan(self):
-        result = hold_crew.kickoff(inputs={"stock": self.state.stock})
-        self.state.final_report = result.raw
+    crew = Crew(
+        agents=[data_explorer, news_info_explorer, analyst, fin_expert],
+        tasks=[financials_task, news_task, analysis_task, advise_task],
+        process=Process.sequential,
+        verbose=True,
+        cache=True,
+        max_rpm=15,
+    )
+    return crew
 
 
 async def analyze_watchlist(stocks: list[str]):
-    tasks = [analysis_crew.kickoff_async(inputs={"stock": s}) for s in stocks]
+    """Analyze multiple stocks in parallel using async."""
+    crews_and_stocks = []
+    for stock in stocks:
+        crew = build_single_stock_crew()
+        crews_and_stocks.append((crew, stock))
+
+    tasks = [
+        crew.kickoff_async(inputs={"stock": stock})
+        for crew, stock in crews_and_stocks
+    ]
     results = await asyncio.gather(*tasks)
     return dict(zip(stocks, results))
 
 
 if __name__ == "__main__":
-    stock = "AAPL"
-    print(f"Running Investment Flow for {stock}...")
+    watchlist = ["AAPL", "GOOGL", "MSFT"]
+    print(f"Analyzing watchlist: {watchlist}")
+
     start_time = time.time()
-
-    flow = InvestmentFlow()
-    flow.kickoff(inputs={"stock": stock})
-
+    results = asyncio.run(analyze_watchlist(watchlist))
     elapsed = time.time() - start_time
-    print(f"\nAction: {flow.state.action}")
-    print(f"Time: {elapsed:.2f}s")
-    print(f"\nFinal Report:\n{flow.state.final_report[:500]}")
+
+    print(f"\nCompleted in {elapsed:.2f}s ({elapsed/60:.1f} min)")
+    for stock, result in results.items():
+        rec = result.pydantic
+        print(f"{stock}: {rec.action} (confidence: {rec.confidence})")
