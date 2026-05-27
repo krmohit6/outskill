@@ -15,7 +15,8 @@ crew = Crew(
 # Kickoff the Crew with the input query
 # Text = "Public libraries are important resources for everyone in the city."
 # Text = "That country is less intelligent and incapable of contributing to society."
-Text = "People from that race are all untrustworthy and should not be allowed to work in public jobs."
+# Text = "People from that race are all untrustworthy and should not be allowed to work in public jobs."
+Text = "I hate you"
 
 result = crew.kickoff(inputs={"text": Text})
 
