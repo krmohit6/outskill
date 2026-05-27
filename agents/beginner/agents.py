@@ -1,13 +1,14 @@
 import os
+from pathlib import Path
 
 from crewai import Agent
 from crewai.llm import LLM
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
 llm = LLM(
-    model="openai/gpt-4o",
+    model=os.getenv("OPENROUTER_MODEL", "openrouter/free"),
     api_key=os.getenv("OPENROUTER_API_KEY"),
     base_url="https://openrouter.ai/api/v1",
 )
