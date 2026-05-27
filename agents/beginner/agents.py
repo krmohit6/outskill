@@ -5,10 +5,14 @@ from crewai import Agent
 from crewai.llm import LLM
 from dotenv import load_dotenv
 
-load_dotenv(Path(__file__).resolve().parents[2] / ".env")
+load_dotenv(Path(__file__).resolve().parents[2] / ".env", override=True)
+
+_model = os.getenv("OPENROUTER_MODEL", "google/gemma-4-26b-a4b-it:free")
+if not _model.startswith("openrouter/"):
+    _model = f"openrouter/{_model}"
 
 llm = LLM(
-    model=os.getenv("OPENROUTER_MODEL", "openrouter/free"),
+    model=_model,
     api_key=os.getenv("OPENROUTER_API_KEY"),
     base_url="https://openrouter.ai/api/v1",
 )
